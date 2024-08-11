@@ -1,28 +1,215 @@
-// src/services/api.ts
-
 import { Question } from '@/types';
 
-// 더미 데이터 생성을 위한 헬퍼 함수
-const generateDummyQuestions = (count: number): Question[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i + 1,
-    author: `사용자${i + 1}`,
-    tags: ['태그1', '태그2', '태그3'].slice(0, Math.floor(Math.random() * 3) + 1),
-    title: `질문 제목 ${i + 1}`,
-    content: `이것은 질문 ${i + 1}의 내용입니다. 여기에 질문에 대한 자세한 설명이 들어갑니다.`,
-    participants: Math.floor(Math.random() * 100),
-    comments: Math.floor(Math.random() * 50),
-    likes: Math.floor(Math.random() * 30),
-  }));
+const generateDummyQuestions = (): Question[] => {
+  return [
+    {
+      id: 1,
+      author: '영화광123',
+      tags: ['영화', '데이트', '취미'],
+      title: '영화보기 vs 안보기',
+      content: '데드풀 보려고 했는데 친구랑 싸우다가 밥때를 놓쳐버렸네요. 일요일인데 밥먹고 쉴까요, 배고파도 영화 보고올까요? 어떻게 하는 게 좋을까요?',
+      participants: 15,
+      comments: 8,
+      likes: 3,
+    },
+    {
+      id: 2,
+      author: '햇살방지꼼꼼이',
+      tags: ['뷰티', '선크림', '피부관리'],
+      title: '선크림 바를때 어떻게 하시나요?',
+      content: '보통 선크림 지속시간이 6시간이라던데, 그럼 6시간 뒤에는 또 발라야 하잖아요? 걍 바른 거 위에 덧바르나요? 아니면 먼저 발랐던 거 폼클렌징으로 지우고 기초부터 다시 발라야 하나요? 어떻게 하시나요?',
+      participants: 42,
+      comments: 23,
+      likes: 17,
+    },
+    {
+      id: 3,
+      author: '컴잘알못',
+      tags: ['컴퓨터', '모니터', '문제해결'],
+      title: '컴 모니터 계속 깜빡거림',
+      content: '언제부터인지 자꾸 모니터가 깜빡깜빡거리기 시작했어요. 한 1.5초 간격으로 발생해요. 폰으로 검색해서 이것저것 다 해봐도 똑같아요. 임시 해결책은 본체에 연결된 모니터 선 뺐다가 잠시 후 다시 끼는 거 외엔 답이 없더라고요. 그래도 요즘은 선 뺐다 끼는 반복해야 돌아와요. 그냥 모니터 바꿔야 할까요?',
+      participants: 28,
+      comments: 15,
+      likes: 7,
+    },
+    {
+      id: 4,
+      author: '주식초보왕',
+      tags: ['주식', '투자', '포트폴리오'],
+      title: '내 포트폴리오 어때요?',
+      content: '제 포트폴리오 어떤가요? 예쁜가요? 배당주 위주로 세팅해봤어요! (주식 목록 이미지) 조언 부탁드려요!',
+      participants: 56,
+      comments: 31,
+      likes: 22,
+    },
+    {
+      id: 5,
+      author: '운동하는직장인',
+      tags: ['운동', '다이어트', '건강'],
+      title: '퇴근 후 운동, 어떻게 하시나요?',
+      content: '매일 야근하다 보니 운동할 시간이 없네요. 퇴근 후에 운동하시는 분들 어떻게 하시나요? 집에 가면 그냥 쉬고 싶은데, 살은 빼고 싶고... 효과적인 방법 있나요?',
+      participants: 89,
+      comments: 47,
+      likes: 35,
+    },
+    {
+      id: 6,
+      author: '여행고수되고픈사람',
+      tags: ['여행', '계획', '추천'],
+      title: '3박4일 제주도 여행 코스 추천해주세요',
+      content: '다음 달에 제주도로 첫 여행을 가기로 했어요. 3박 4일 동안 가볼 만한 곳들 추천해주세요! 렌트카는 할 예정이에요. 맛집도 알려주시면 감사하겠습니다 :)',
+      participants: 72,
+      comments: 39,
+      likes: 28,
+    },
+    {
+      id: 7,
+      author: '독서광',
+      tags: ['독서', '취미', '추천'],
+      title: '요즘 재밌게 읽은 책 있나요?',
+      content: '최근에 읽은 책 중에 정말 재밌거나 인상 깊었던 책 있으신가요? 장르 상관없이 추천해주세요. 요즘 책 고르기가 너무 어려워요 ㅠㅠ',
+      participants: 63,
+      comments: 41,
+      likes: 29,
+    },
+    {
+      id: 8,
+      author: '코딩초보자',
+      tags: ['프로그래밍', 'Python', '학습'],
+      title: '파이썬 독학하는데 어려워요',
+      content: '파이썬 독학 중인데 자꾸 막히네요. 특히 클래스와 객체지향 개념이 이해가 잘 안 돼요. 쉽게 설명해주실 수 있는 분 계신가요? 추천할 만한 학습 자료도 알려주세요!',
+      participants: 45,
+      comments: 22,
+      likes: 13,
+    },
+    {
+      id: 9,
+      author: '집사랑고양이',
+      tags: ['반려동물', '고양이', '건강'],
+      title: '고양이가 밥을 잘 안 먹어요',
+      content: '3살 된 고양이인데 요즘 밥을 잘 안 먹어요. 평소엔 잘 먹던 사료인데 갑자기 안 먹네요. 간식은 잘 먹는데 사료만 안 먹어요. 병원에 가봐야 할까요? 다들 어떻게 하시나요?',
+      participants: 51,
+      comments: 29,
+      likes: 18,
+    },
+    {
+      id: 10,
+      author: '요리하는남자',
+      tags: ['요리', '레시피', '초보'],
+      title: '초보자도 쉽게 만들 수 있는 요리 추천해주세요',
+      content: '요리를 배우고 싶은데 너무 어려워 보여요. 초보자도 쉽게 만들 수 있는 요리 좀 추천해주세요. 재료도 구하기 쉽고 만들기도 간단한 걸로요!',
+      participants: 78,
+      comments: 45,
+      likes: 33,
+    },
+    {
+      id: 11,
+      author: '취미부자',
+      tags: ['취미', '스트레스', '추천'],
+      title: '스트레스 해소에 좋은 취미 추천해주세요',
+      content: '직장 생활하면서 스트레스가 너무 쌓여요. 퇴근 후에 할 수 있는 스트레스 해소에 좋은 취미 추천해주세요. 운동은 좀 힘들 것 같고, 실내에서 할 수 있는 걸로요.',
+      participants: 94,
+      comments: 56,
+      likes: 41,
+    },
+    {
+      id: 12,
+      author: '식물집사',
+      tags: ['식물', '원예', '인테리어'],
+      title: '초보자가 키우기 쉬운 실내 식물 추천해주세요',
+      content: '집에 식물을 들이고 싶은데 처음이라 걱정돼요. 초보자가 키우기 쉬운 실내 식물 좀 추천해주세요. 공기정화 효과 있는 것도 좋고, 예쁜 것도 좋아요!',
+      participants: 67,
+      comments: 38,
+      likes: 25,
+    },
+    {
+      id: 13,
+      author: 'IT궁금이',
+      tags: ['IT', '스마트폰', '구매'],
+      title: '다음 스마트폰, 뭘로 바꿀까요?',
+      content: '2년 써온 폰을 바꾸려고 해요. 아이폰이랑 갤럭시 중에 고민 중인데, 어떤 게 더 좋을까요? 카메라 성능이 중요하고 배터리도 오래 가는 게 좋아요. 추천해주세요!',
+      participants: 108,
+      comments: 72,
+      likes: 45,
+    },
+    {
+      id: 14,
+      author: '재테크초보',
+      tags: ['재테크', '저축', '투자'],
+      title: '월급의 얼마를 저축해야 할까요?',
+      content: '직장인 2년차예요. 월급을 받으면 얼마나 저축해야 할까요? 그리고 적금, 주식, 펀드 중에 뭐가 제일 좋을까요? 재테크 조언 부탁드려요!',
+      participants: 86,
+      comments: 53,
+      likes: 37,
+    },
+    {
+      id: 15,
+      author: '음악덕후',
+      tags: ['음악', '플레이리스트', '추천'],
+      title: '출퇴근길에 듣기 좋은 노래 추천해주세요',
+      content: '매일 같은 노래만 듣다 보니 질리네요. 출퇴근길에 듣기 좋은 노래 추천해주세요. 장르 상관없이 기분 좋아지는 노래로요!',
+      participants: 73,
+      comments: 49,
+      likes: 31,
+    },
+    {
+      id: 16,
+      author: '운동초보',
+      tags: ['운동', '홈트레이닝', '다이어트'],
+      title: '집에서 할 수 있는 효과적인 운동 없나요?',
+      content: '요즘 살이 좀 쪘는데, 헬스장 가기는 귀찮아요. 집에서 할 수 있는 효과적인 운동 없을까요? 특별한 기구 없이 할 수 있는 걸로 추천해주세요!',
+      participants: 95,
+      comments: 61,
+      likes: 42,
+    },
+    {
+      id: 17,
+      author: '영어공부중',
+      tags: ['외국어', '영어', '학습법'],
+      title: '영어 실력 늘리는 꿀팁 있나요?',
+      content: '토익 준비 중인데 점수가 안 올라요. 영어 실력 늘리는 꿀팁 없나요? 특히 듣기랑 독해가 너무 어려워요. 효과적인 공부법 알려주세요!',
+      participants: 82,
+      comments: 47,
+      likes: 33,
+    },
+    {
+      id: 18,
+      author: '이사준비중',
+      tags: ['이사', '정리', '팁'],
+      title: '이사 준비, 어떻게 하시나요?',
+      content: '다음 달에 이사를 앞두고 있는데 막막해요. 짐 정리는 어떻게 하시나요? 버릴 것과 가져갈 것 구분하기가 너무 어려워요. 이사 꿀팁 있으면 알려주세요!',
+      participants: 69,
+      comments: 41,
+      likes: 28,
+    },
+    {
+      id: 19,
+      author: '친환경생활러',
+      tags: ['환경', '제로웨이스트', '생활팁'],
+      title: '일상에서 쉽게 실천할 수 있는 친환경 생활 팁',
+      content: '환경을 위해 제로웨이스트 생활을 시작해보려고 해요. 일상에서 쉽게 실천할 수 있는 친환경 생활 팁 있을까요? 너무 급격한 변화는 힘들 것 같아서 작은 것부터 시작하고 싶어요.',
+      participants: 76,
+      comments: 52,
+      likes: 39,
+    },
+    {
+      id: 20,
+      author: '커피러버',
+      tags: ['커피', '홈카페', '레시피'],
+      title: '집에서 즐기는 나만의 커피 레시피',
+      content: '요즘 집에서 커피 내려 마시는 재미에 빠졌어요. 여러분만의 특별한 커피 레시피 있나요? 라떼나 아이스커피 등 다양한 레시피 공유해주세요. 재료나 도구도 추천해주시면 감사하겠습니다!',
+      participants: 88,
+      comments: 59,
+      likes: 43,
+    },
+  ];
 };
+
 
 export const fetchQuestions = async (): Promise<Question[]> => {
   // API 호출을 시뮬레이션하기 위해 지연 추가
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // 10개의 더미 질문 데이터 생성 및 반환
-  return generateDummyQuestions(10);
+  // 20개의 더미 질문 데이터 생성 및 반환
+  return generateDummyQuestions();
 };
-
-// 필요에 따라 다른 API 함수들을 여기에 추가할 수 있습니다.
-// 예: fetchQuestionById, postAnswer, likeQuestion 등
