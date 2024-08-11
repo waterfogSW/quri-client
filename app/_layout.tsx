@@ -1,37 +1,57 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Tabs } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
+import { View, Text, StyleSheet } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+function LogoTitle() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <View style={styles.headerContainer}>
+      <Text style={styles.logoText}>Quri</Text>
+    </View>
   );
 }
+
+export default function AppLayout() {
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: true,
+        headerTitle: () => <LogoTitle />,
+        headerStyle: { backgroundColor: '#f4f4f4' },
+        tabBarStyle: { backgroundColor: '#f4f4f4' },
+        tabBarShowLabel: false,
+      }}
+    >
+      <Tabs.Screen
+        name="(tabs)/my-questions"
+        options={{
+          tabBarIcon: ({ color, size }) => <Feather name="help-circle" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="(tabs)/home"
+        options={{
+          tabBarIcon: ({ color, size }) => <Feather name="home" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="(tabs)/profile"
+        options={{
+          tabBarIcon: ({ color, size }) => <Feather name="user" size={size} color={color} />,
+        }}
+      />
+    </Tabs>
+  );
+}
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+});
